@@ -1,98 +1,115 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
-  const [productName, setProductName] = useState("");
-  const [desc, setDesc] = useState("");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
+  const [formData, setFormData] = useState({
+    productName: "",
+    productPrice: "",
+    productDescription: "",
+    productImage: "",
+  });
 
-  const handleName = (e) => {
-    if (e.target.value !== "") setProductName(e.target.value);
-  };
-
-  const handlePrice = (e) => {
-    if (e.target.value !== "") setPrice(e.target.value);
-  };
-  const handleDesc = (e) => {
-    if (e.target.value !== "") setDesc(e.target.value);
-  };
-  const handleImage = (e) => {
-    if (e.target.value !== "") setImage(e.target.value);
-  };
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Success");
+    try {
+      await axios.post(
+        "https://6904c2f76b8dabde496507ac.mockapi.io/products",
+        formData
+      );
+      navigate("/");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <form className="max-w-sm mx-auto">
-        <h1 className="text-3xl mb-5">Create Form </h1>
+    <>
+      <form className="max-w-sm mx-auto mt-5" onSubmit={handleSubmit}>
         <div className="mb-5">
           <label
-            htmlFor="large-input"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            htmlFor="productName"
+            className="block mb-2 text-sm font-medium text-gray-900">
             Product Name
           </label>
           <input
             type="text"
-            value={productName}
-            onChange={handleName}
-            id="large-input"
-            className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="base-input1"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Price
-          </label>
-          <input
-            type="number"
-            value={price}
-            onChange={handlePrice}
-            id="base-input1"
+            id="productName"
+            name="productName"
+            value={formData.productName}
+            onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter Your Product Name"
+            required
           />
         </div>
-
         <div className="mb-5">
           <label
-            htmlFor="base-input"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Description
+            htmlFor="productPrice"
+            className="block mb-2 text-sm font-medium text-gray-900">
+            Product Price
           </label>
           <input
             type="text"
-            value={desc}
-            onChange={handleDesc}
-            id="base-input"
+            id="productPrice"
+            name="productPrice"
+            value={formData.productPrice}
+            onChange={handleChange}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter Your Product Price"
+            required
           />
         </div>
         <div className="mb-5">
           <label
-            htmlFor="small-input"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Image
+            htmlFor="productDescription"
+            className="block mb-2 text-sm font-medium text-gray-900">
+            Product Description
           </label>
           <input
-            type="url"
-            id="small-input"
-            value={image}
-            onChange={handleImage}
-            className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            type="text"
+            id="productDescription"
+            name="productDescription"
+            value={formData.productDescription}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter Your Product Description"
+            required
+          />
+        </div>
+        <div className="mb-5">
+          <label
+            htmlFor="productImage"
+            className="block mb-2 text-sm font-medium text-gray-900">
+            Product Image
+          </label>
+          <input
+            type="text"
+            id="productImage"
+            name="productImage"
+            value={formData.productImage}
+            onChange={handleChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter Your Product Image Url"
+            required
           />
         </div>
         <button
           type="submit"
-          onSubmit={handleSubmit}
-          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
           Submit
         </button>
       </form>
-    </div>
+    </>
   );
 };
 
